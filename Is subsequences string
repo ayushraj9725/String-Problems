@@ -1,0 +1,79 @@
+Problem : is subsequences string 
+
+
+Problem Statement :
+Given two strings s1 and s2. You have to check that s1 is a subsequence of s2 or not.
+Note: A subsequence is a sequence that can be derived from another sequence by deleting some elements without changing the order of the remaining elements.
+
+Examples:
+
+Input: s1 = "AXY", s2 = "YADXCP"
+Output: false
+Explanation: s1 is not a subsequence of s2 as 'Y' appears before 'A'.
+
+Input: s1 = "gksrek", s2 = "geeksforgeeks"
+Output: true
+Explanation: If we combine the bold character of "geeksforgeeks", it equals to s1. So s1 is a subsequence of s2. 
+
+Constraints:
+1 ≤ s1.size(), s2.size() ≤ 106
+
+Expected Complexities
+Time Complexity: O(n)
+Auxiliary Space: O(1)
+
+
+
+/******************************************************    Solution   ****************************************************************/
+
+
+optimal in : O(N) time and spce : O(1)
+
+
+class Solution {
+  public:
+    bool isSubSeq(string& s1, string& s2) {
+        // code here
+        int n1 = s1.size();
+        int n2 = s2.size();
+        
+        int i = 0 , j = 0 ;
+        
+        while(i < n1 && j < n2){
+            if(s1[i] == s2[j]){
+                i++ ;
+            }
+            j++ ;
+        }
+        
+        return i == n1 ;
+        
+    }
+};
+
+
+
+///////////            Brute force                  ////////////////////
+
+
+using recursion
+
+
+ static boolean isSubSequence(String s1, String s2,
+                                 int m, int n){
+        // Base Cases
+        if (m == 0)
+            return true;
+        if (n == 0)
+            return false;
+
+        // If last characters of two strings are matching
+        if (s1.charAt(m - 1) == s2.charAt(n - 1))
+            return isSubSequence(s1, s2, m - 1, n - 1);
+
+        // If last characters are not matching
+        return isSubSequence(s1, s2, m, n - 1);
+  }
+
+
+/////////////////////////////////////////////////////////////////////////////
