@@ -1,0 +1,88 @@
+
+Problem Statement : 
+
+You are given a string s. Return the array of unique characters, sorted by highest to lowest occurring characters.
+If two or more characters have same frequency then arrange them in alphabetic order.
+
+Examples:
+Input : s = "tree"
+Output : ['e', 'r', 't' ]
+Explanation : The occurrences of each character are as shown below :
+e --> 2
+r --> 1
+t --> 1.
+The r and t have same occurrences , so we arrange them by alphabetic order.
+
+Input : s = "raaaajj"
+Output : ['a' , 'j', 'r' ]
+Explanation : The occurrences of each character are as shown below :
+a --> 4
+j --> 2
+r --> 1
+
+
+
+//////////////      C++  SOLUTIONS     ///////////////////
+
+class Solution{	
+	public:
+		vector<char> frequencySort(string& s){
+			//your code goes here
+
+        unordered_map<char,int> mp;
+        for(char c : s){
+            mp[c]++ ;
+        }
+        
+        vector<pair<char,int>> tmp(mp.begin(),mp.end());
+        // sorted according to key
+
+        sort(tmp.begin(),tmp.end(), [](auto &a, auto &b){
+            if (a.second == b.second) {
+            return a.first < b.first; // alphabet order if freq equal
+        }
+        return a.second > b.second; // sort by freq descending
+        }); // sorted based on frequency
+
+        vector<char> ans ;
+
+        for(auto &p : tmp){
+            ans.push_back(p.first);
+        }
+
+      return ans ;
+
+	}
+};
+
+////////////////////////     JAVA SOLUTION     ///////////////////////
+
+class Solution {    
+    public List<Character> frequencySort(String s) {
+        // Your code goes here
+
+     Map<Character ,Integer> mp = new HashMap<>();
+
+     for(char c : s.toCharArray()){
+        mp.put(c,mp.getOrDefault(c,0)+1);
+     }
+
+     List<Map.Entry(Character,Integer)> list = new ArrayList(mp.entrySet());
+     list.sort((a,b) -> 
+       if(a.getValue().equals(b.getValue())){
+         return a.getValue() - b.getValue();
+       }
+       return b.getValue() - a.getValue();
+     );
+
+    List<Character> ans = new ArrayList<>();
+
+    for(Map.Entry(Character,Integer) entry : list){
+        ans.add(entry.getKey());
+    }
+    
+     return ans ;
+
+    }
+}
+
