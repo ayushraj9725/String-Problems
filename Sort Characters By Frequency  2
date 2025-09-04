@@ -1,0 +1,142 @@
+
+Problem Stataement : leetcode 451
+
+Given a string s, sort it in decreasing order based on the frequency of the characters. The frequency of a character is the number of times it appears in the string.
+Return the sorted string. If there are multiple answers, return any of them.
+
+Example 1:
+Input: s = "tree"
+Output: "eert"
+Explanation: 'e' appears twice while 'r' and 't' both appear once.
+So 'e' must appear before both 'r' and 't'. Therefore "eetr" is also a valid answer.
+
+Example 2:
+Input: s = "cccaaa"
+Output: "aaaccc"
+Explanation: Both 'c' and 'a' appear three times, so both "cccaaa" and "aaaccc" are valid answers.
+Note that "cacaca" is incorrect, as the same characters must be together.
+
+Example 3:
+Input: s = "Aabb"
+Output: "bbAa"
+Explanation: "bbaA" is also a valid answer, but "Aabb" is incorrect.
+Note that 'A' and 'a' are treated as two different characters.
+ 
+Constraints:
+
+1 <= s.length <= 5 * 105
+s consists of uppercase and lowercase English letters and digits.
+
+
+
+SOLUTIONS  
+
+ /************************************************************************ SOLUTION C++  ******************************************************************/
+
+class Solution {
+public:
+    string frequencySort(string s) {
+        
+     // brute force 
+
+    // step 1 : store all the char in map
+    
+     unordered_map<char,int> mp ;   // n space we are using here 
+     for(char c : s){
+        mp[c]++ ;
+     }
+
+     // step 2 : store those mp in pair so that we can sort  // n space again 
+
+     vector<pair<char,int>> tmp(mp.begin(),mp.end()); // filled all value in the tmp
+     // step 3 : now we have to sort this pair 
+ 
+     sort(tmp.begin(),tmp.end(), [](auto &a , auto &b)
+     {
+        if (a.second == b.second) {
+            return a.first < b.first; // alphabet order if freq equal
+        }
+        return a.second > b.second; // sort by freq descending
+        // sorting perform here on the basis of both key and freq 
+     }
+     );
+
+     // step 4 : now in the result string we have to store that iterating over the pair
+     string result ; // n space again we are using 
+     for(auto &p : tmp){
+        result.append(p.second,p.first); // append in s p.first , p.second times 
+     }
+
+     return result ;
+
+     // this : brute force takes  O(2NlogN) + O(N) time and O(3N) space too
+
+    }
+};
+
+////////////////////////////////////////////////////////////////////////// SOLUTION JAVA  /////////////////////////////////////////////////////////////////
+
+class Solution {
+    public String frequencySort(String s) {
+        // Step 1: Count frequency of each character
+        Map<Character, Integer> freq = new HashMap<>();
+        for (char c : s.toCharArray()) {
+            freq.put(c, freq.getOrDefault(c, 0) + 1);
+        }
+
+        // Step 2: Put entries into a list and sort by frequency descending
+        List<Map.Entry<Character, Integer>> list = new ArrayList<>(freq.entrySet());
+        list.sort((a, b) -> b.getValue() - a.getValue());
+
+        // Step 3: Build result
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<Character, Integer> entry : list) {
+            char c = entry.getKey();
+            int count = entry.getValue();
+            for (int i = 0; i < count; i++) {
+                sb.append(c);
+            }
+        }
+
+        return sb.toString();
+    }
+}
+
+
+//////////////////   OPTIMAL SOLUTION  USING BUCKET SORT  in O(N) time  ////////////////////////  
+
+
+class Solution {
+    public String frequencySort(String s) {
+        Map<Character, Integer> freq = new HashMap<>();
+        for (char c : s.toCharArray()) {
+            freq.put(c, freq.getOrDefault(c, 0) + 1);
+        }
+
+        // Buckets: index = frequency, value = list of chars with that frequency
+        List<Character>[] buckets = new List[s.length() + 1];
+        for (char c : freq.keySet()) {
+            int f = freq.get(c);
+            if (buckets[f] == null) {
+                buckets[f] = new ArrayList<>();
+            }
+            buckets[f].add(c);
+        }
+
+        // Build string from high freq to low
+        StringBuilder sb = new StringBuilder();
+        for (int i = s.length(); i > 0; i--) {
+            if (buckets[i] != null) {
+                for (char c : buckets[i]) {
+                    sb.append(String.valueOf(c).repeat(i));
+                }
+            }
+        }
+        return sb.toString();
+    }
+}
+
+
+
+
+
